@@ -18,7 +18,7 @@ defmodule Pento.Accounts.Scope do
 
   alias Pento.Accounts.User
 
-  defstruct user: nil
+  defstruct user: nil, roles: [:admin]
 
   @doc """
   Creates a scope for the given user.

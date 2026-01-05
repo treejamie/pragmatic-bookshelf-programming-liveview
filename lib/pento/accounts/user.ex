@@ -3,6 +3,9 @@ defmodule Pento.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
+    # NOTE : this isn't in any of the changesets yet and it
+    # needs to have a unique contsraint:
+    # |> unique_constraint(:id, name: :fulfillment_lines_pkey)
     field :username, :string
     field :email, :string
     field :password, :string, virtual: true, redact: true

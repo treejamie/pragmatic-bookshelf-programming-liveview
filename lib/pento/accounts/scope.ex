@@ -18,7 +18,7 @@ defmodule Pento.Accounts.Scope do
 
   alias Pento.Accounts.User
 
-  defstruct user: nil, roles: [:admin]
+  defstruct user: nil, roles: []
 
   @doc """
   Creates a scope for the given user.
@@ -26,7 +26,15 @@ defmodule Pento.Accounts.Scope do
   Returns nil if no user is given.
   """
   def for_user(%User{} = user) do
-    %__MODULE__{user: user}
+    # if it's me, I'm an admin - worst permission system in the world
+    roles =
+      case user.email do
+        "jamie@curle.io" -> [:admin]
+        _ -> []
+      end
+
+    # now return the scope
+    %__MODULE__{user: user, roles: roles}
   end
 
   def for_user(nil), do: nil

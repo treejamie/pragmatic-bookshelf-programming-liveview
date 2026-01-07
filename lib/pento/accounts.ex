@@ -8,6 +8,17 @@ defmodule Pento.Accounts do
 
   alias Pento.Accounts.{User, UserToken, UserNotifier}
 
+  ## Scope getter -
+
+  @doc """
+  The books makes use of a get_scope_for_user function but it doesn't (or at least in my case)
+  didn't exist. So here is my take on it.
+  """
+  def get_scope_for_user(user_id) do
+    user = get_user!(user_id)
+    Pento.Accounts.Scope.for_user(user)
+  end
+
   ## Database getters
 
   @doc """

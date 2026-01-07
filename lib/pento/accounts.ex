@@ -8,7 +8,7 @@ defmodule Pento.Accounts do
 
   alias Pento.Accounts.{User, UserToken, UserNotifier}
 
-  ## Scope getter -
+  ## Scope getters
 
   @doc """
   The books makes use of a get_scope_for_user function but it doesn't (or at least in my case)

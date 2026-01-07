@@ -21,4 +21,13 @@ defmodule Pento.Catalog.Product do
     |> unique_constraint(:sku)
     |> put_change(:user_id, user_scope.user.id)
   end
+
+  @doc false
+  def markdown_changeset(product, attrs, user_scope) do
+    product
+    |> cast(attrs, [:unit_price])
+    |> validate_required([:unit_price])
+    |> validate_number(:unit_price, less_than: product.unit_price)
+    |> put_change(:user_id, user_scope.user.id)
+  end
 end

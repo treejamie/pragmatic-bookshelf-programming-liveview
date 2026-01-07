@@ -10,6 +10,18 @@ defmodule Pento.Catalog do
   alias Pento.Accounts.Scope
 
   @doc """
+  given a product and price, this will reduce product by price
+  """
+  def markdown_product(%Scope{} = scope, product, price) do
+    with %{valid?: true} = cs <- Product.markdown_changeset(product, %{unit_price: price}, scope),
+         %Product{} = product <- Repo.update!(cs) do
+      product
+    else
+      %Ecto.Changeset{} = changeset -> changeset
+    end
+  end
+
+  @doc """
   Subscribes to scoped notifications about any product changes.
 
   The broadcasted messages match the pattern:

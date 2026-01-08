@@ -7,6 +7,7 @@ defmodule PentoWeb.ProductLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <h1 class="text-2xl font-bold">{@greeting}</h1>
       <.header>
         Listing Products
         <:actions>
@@ -53,6 +54,7 @@ defmodule PentoWeb.ProductLive.Index do
     {:ok,
      socket
      |> assign(:page_title, "Listing Products")
+     |> assign(:greeting, "Welcome to Pento!")
      |> stream(:products, list_products(socket.assigns.current_scope))}
   end
 
@@ -67,7 +69,8 @@ defmodule PentoWeb.ProductLive.Index do
   @impl true
   def handle_info({type, %Pento.Catalog.Product{}}, socket)
       when type in [:created, :updated, :deleted] do
-    {:noreply, stream(socket, :products, list_products(socket.assigns.current_scope), reset: true)}
+    {:noreply,
+     stream(socket, :products, list_products(socket.assigns.current_scope), reset: true)}
   end
 
   defp list_products(current_scope) do

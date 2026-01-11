@@ -56,10 +56,18 @@ defmodule PentoWeb.Router do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
       live "/guess", WrongLive
+
+      # products
       live "/products", ProductLive.Index, :index
       live "/products/new", ProductLive.Form, :new
       live "/products/:id", ProductLive.Show, :show
       live "/products/:id/edit", ProductLive.Form, :edit
+
+      # questions - all in auth for now.
+      live "/questions", QuestionLive.Index, :index
+      live "/questions/new", QuestionLive.Form, :new
+      live "/questions/:id", QuestionLive.Show, :show
+      live "/questions/:id/edit", QuestionLive.Form, :edit
     end
 
     post "/users/update-password", UserSessionController, :update_password

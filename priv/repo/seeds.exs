@@ -14,7 +14,7 @@ alias Pento.{Accounts, Catalog}
 # create a user
 {:ok, user} =
   Accounts.register_user(%{
-    email: "seed@example.com",
+    email: "jamie@curle.io",
     password: "password123password123"
   })
 

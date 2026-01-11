@@ -282,6 +282,8 @@ defmodule PentoWeb.CoreComponents do
   @doc """
   Renders a header with title.
   """
+  attr :class, :string, default: nil
+
   slot :inner_block, required: true
   slot :subtitle
   slot :actions

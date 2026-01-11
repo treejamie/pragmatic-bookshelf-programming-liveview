@@ -3,10 +3,12 @@ defmodule PentoWeb.ProductLive.Index do
 
   alias Pento.Catalog
 
-  @impl true
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <pre><%= inspect assigns, pretty: true %></pre>
+      <h1 class="text-2xl font-bold">{@greeting}</h1>
       <.header>
         Listing Products
         <:actions>
@@ -29,7 +31,7 @@ defmodule PentoWeb.ProductLive.Index do
           <div class="sr-only">
             <.link navigate={~p"/products/#{product}"}>Show</.link>
           </div>
-          <.link navigate={~p"/products/#{product}/edit"}>Edit</.link>
+          <.link patch={~p"/products/#{product}/edit"}>Edit</.link>
         </:action>
         <:action :let={{id, product}}>
           <.link
@@ -44,7 +46,7 @@ defmodule PentoWeb.ProductLive.Index do
     """
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     if connected?(socket) do
       Catalog.subscribe_products(socket.assigns.current_scope)
@@ -53,10 +55,11 @@ defmodule PentoWeb.ProductLive.Index do
     {:ok,
      socket
      |> assign(:page_title, "Listing Products")
+     |> assign(:greeting, "Welcome to Pento!")
      |> stream(:products, list_products(socket.assigns.current_scope))}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_event("delete", %{"id" => id}, socket) do
     product = Catalog.get_product!(socket.assigns.current_scope, id)
     {:ok, _} = Catalog.delete_product(socket.assigns.current_scope, product)
@@ -64,10 +67,11 @@ defmodule PentoWeb.ProductLive.Index do
     {:noreply, stream_delete(socket, :products, product)}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_info({type, %Pento.Catalog.Product{}}, socket)
       when type in [:created, :updated, :deleted] do
-    {:noreply, stream(socket, :products, list_products(socket.assigns.current_scope), reset: true)}
+    {:noreply,
+     stream(socket, :products, list_products(socket.assigns.current_scope), reset: true)}
   end
 
   defp list_products(current_scope) do

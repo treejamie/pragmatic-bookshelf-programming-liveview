@@ -20,14 +20,14 @@ defmodule Pento.Promo do
       |> change_recipient(attrs)
       |> Ecto.Changeset.apply_action(:update)
 
-    with {:ok, %{valid?: true}} <- changeset do
+    with {:ok, changes} <- changeset do
       IO.inspect("send it")
-      {:ok, changeset}
+      {:ok, changes}
     else
       error ->
-        IO.inspect(error)
+        IO.inspect(error, label: "error")
         IO.inspect("nope")
-        {:error, changeset}
+        error
     end
   end
 end

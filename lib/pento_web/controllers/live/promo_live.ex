@@ -13,19 +13,20 @@ defmodule PentoWeb.PromoLive do
         %{"recipient" => recipient_params},
         %{assigns: %{recipient: recipient}} = socket
       ) do
-    socket =
-      case Promo.send_promo(recipient, recipient_params) do
-        {:ok, _changeset} ->
-          socket
-          |> put_flash(:info, "sent it")
+    {:noreply,
+     case Promo.send_promo(recipient, recipient_params) do
+       {:ok, _changeset} ->
+         socket
+         |> put_flash(:info, "sent it")
+         |> push_navigate(to: ~p"/")
 
-        {:error, changeset} ->
-          socket
-          |> put_flash(:error, "could not send it")
-          |> assign_form(changeset)
-      end
+       {:error, changeset} ->
+         IO.inspect(changeset)
 
-    {:noreply, socket}
+         socket
+         |> put_flash(:error, "could not send it")
+         |> assign_form(changeset)
+     end}
   end
 
   def handle_event(

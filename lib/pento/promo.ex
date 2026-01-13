@@ -15,8 +15,19 @@ defmodule Pento.Promo do
   # TODO: Sends a promotional email
   """
   def send_promo(recipient, attrs) do
-    recipient
-    |> change_recipient(attrs)
-    |> Ecto.Changeset.apply_action(:update)
+    changeset =
+      recipient
+      |> change_recipient(attrs)
+      |> Ecto.Changeset.apply_action(:update)
+
+    with {:ok, %{valid?: true}} <- changeset do
+      IO.inspect("send it")
+      {:ok, changeset}
+    else
+      error ->
+        IO.inspect(error)
+        IO.inspect("nope")
+        {:error, changeset}
+    end
   end
 end

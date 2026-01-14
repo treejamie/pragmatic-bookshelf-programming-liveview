@@ -16,6 +16,7 @@
       field={@form[:email]}
       type="email"
       label="Email"
+      phx-debounce="blur"
     />
     <.button phx-disable-with="Sending...">Send Promo</.button>
   </.form>

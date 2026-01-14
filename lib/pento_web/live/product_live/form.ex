@@ -107,7 +107,25 @@ defmodule PentoWeb.ProductLive.Form do
   end
 
   def handle_event("save", %{"product" => product_params}, socket) do
+    product_params = params_with_image(socket, product_params)
     save_product(socket, socket.assigns.live_action, product_params)
+  end
+
+  def params_with_image(socket, params) do
+    path =
+      socket
+      |> consume_uploaded_entries(:image, &upload_static_file/2)
+      |> List.first()
+
+    Map.put(params, "image_upload", path)
+  end
+
+  defp upload_static_file(%{path: path}, _entry) do
+    # Plug in your production image file persistence implementation here!
+    filename = Path.basename(path)
+    dest = Path.join("priv/static/images", filename)
+    File.cp!(path, dest)
+    {:ok, ~p"/images/#{filename}"}
   end
 
   defp save_product(socket, :edit, product_params) do

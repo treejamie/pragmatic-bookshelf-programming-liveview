@@ -7,7 +7,6 @@ defmodule PentoWeb.ProductLive.Index do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <pre><%= inspect assigns, pretty: true %></pre>
       <h1 class="text-2xl font-bold">{@greeting}</h1>
       <.header>
         Listing Products

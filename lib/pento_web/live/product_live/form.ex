@@ -120,13 +120,17 @@ defmodule PentoWeb.ProductLive.Form do
     Map.put(params, "image_upload", path)
   end
 
-  defp upload_static_file(%{path: path}, _entry) do
+  defp upload_static_file(%{path: path}, entry) do
     # Plug in your production image file persistence implementation here!
-    filename = Path.basename(path)
-    dest = Path.join("priv/static/images", filename)
+    filename = Path.basename(path) <> get_file_ext(entry)
+    dest = Path.join("priv/static/images/uploads/", filename)
     File.cp!(path, dest)
-    {:ok, ~p"/images/#{filename}"}
+    IO.inspect(filename)
+    {:ok, ~p"/images/uploads/#{filename}"}
   end
+
+  defp get_file_ext(%{client_type: "image/jpeg"}), do: ".jpg"
+  defp get_file_ext(_), do: ""
 
   defp save_product(socket, :edit, product_params) do
     case Catalog.update_product(
@@ -147,7 +151,9 @@ defmodule PentoWeb.ProductLive.Form do
     end
   end
 
-  defp save_product(socket, :new, product_params) do
+  defp save_product(socket, :new, params) do
+    product_params = params_with_image(socket, params)
+
     case Catalog.create_product(socket.assigns.current_scope, product_params) do
       {:ok, product} ->
         {:noreply,

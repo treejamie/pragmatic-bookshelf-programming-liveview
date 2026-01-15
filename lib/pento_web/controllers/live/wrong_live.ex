@@ -83,7 +83,7 @@ defmodule PentoWeb.WrongLive do
         </.link>
       <% end %>
     </h2>
-    <h2 class="pt-8">@current_user.email}</h2>
+    <h2 class="pt-8">{@current_user.email}</h2>
     <p>
       <%= if :admin in @roles do %>
         ADMIN

@@ -17,7 +17,7 @@ defmodule PentoWeb.ProductLive.Form do
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:unit_price]} type="number" label="Unit price" step="any" />
-        <.input field={@form[:sku]} type="number" label="Sku" />
+        <.input field={@form[:sku]} type="number" label="Sku" phx-debounce="blur" />
 
         <div
           phx-drop-target={@uploads.image.ref}
@@ -102,6 +102,7 @@ defmodule PentoWeb.ProductLive.Form do
   def handle_event("validate", %{"product" => product_params}, socket) do
     changeset =
       Catalog.change_product(socket.assigns.current_scope, socket.assigns.product, product_params)
+      |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
   end

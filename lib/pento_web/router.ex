@@ -71,6 +71,9 @@ defmodule PentoWeb.Router do
       live "/questions/new", QuestionLive.Form, :new
       live "/questions/:id", QuestionLive.Show, :show
       live "/questions/:id/edit", QuestionLive.Form, :edit
+
+      # search ch5 - your turn
+      live "/search", SearchLive, :form
     end
 
     post "/users/update-password", UserSessionController, :update_password

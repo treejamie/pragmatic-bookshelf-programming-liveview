@@ -21,8 +21,6 @@ defmodule PentoWeb.PromoLive do
          |> push_navigate(to: ~p"/")
 
        {:error, changeset} ->
-         IO.inspect(changeset)
-
          socket
          |> put_flash(:error, "could not send it")
          |> assign_form(changeset)

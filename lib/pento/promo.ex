@@ -3,6 +3,7 @@ defmodule Pento.Promo do
   Context for promotions.
   """
   alias Pento.Promo.Recipient
+  alias Pento.Accounts.RecipientNotifier
 
   @doc """
   Changes the recipient in a changeset.
@@ -20,9 +21,9 @@ defmodule Pento.Promo do
       |> change_recipient(attrs)
       |> Ecto.Changeset.apply_action(:update)
 
-    with {:ok, changes} <- changeset do
-      IO.inspect("send it")
-      {:ok, changes}
+    with {:ok, recipient} <- changeset do
+      RecipientNotifier.deliver_promo_code(recipient)
+      {:ok, recipient}
     else
       error ->
         IO.inspect(error, label: "error")

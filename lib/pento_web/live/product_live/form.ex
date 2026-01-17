@@ -4,6 +4,10 @@ defmodule PentoWeb.ProductLive.Form do
   alias Pento.Catalog
   alias Pento.Catalog.Product
 
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :image, ref)}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -29,13 +33,15 @@ defmodule PentoWeb.ProductLive.Form do
 
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Product</.button>
-          <.button navigate={return_path(@current_scope, @return_to, @product)}>Cancel</.button>
+          <.button navigate={return_path(@current_scope, @return_to, @product)}>
+            Cancel
+          </.button>
         </footer>
       </.form>
       <div :for={entry <- @uploads.image.entries}>
-        <div class="bg-blue-100 border border-blue-400 text-blue-700
-    px-4 py-3 rounded">
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
           {entry.client_name} - {entry.progress}%
+          <button phx-click="cancel-upload" phx-value-ref={entry.ref}> - remove</button>
         </div>
 
         <div
@@ -123,13 +129,14 @@ defmodule PentoWeb.ProductLive.Form do
 
   defp upload_static_file(%{path: path}, entry) do
     # Plug in your production image file persistence implementation here!
+    # unlike the book, I added in a file extention
     filename = Path.basename(path) <> get_file_ext(entry)
     dest = Path.join("priv/static/images/uploads/", filename)
     File.cp!(path, dest)
-    IO.inspect(filename)
     {:ok, ~p"/images/uploads/#{filename}"}
   end
 
+  # TODO: handle the other valid file extensions.
   defp get_file_ext(%{client_type: "image/jpeg"}), do: ".jpg"
   defp get_file_ext(_), do: ""
 

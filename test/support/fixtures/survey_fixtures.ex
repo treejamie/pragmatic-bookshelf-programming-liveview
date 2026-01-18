@@ -3,6 +3,7 @@ defmodule Pento.SurveyFixtures do
   This module defines test helpers for creating
   entities via the `Pento.Survey` context.
   """
+  alias Pento.CatalogFixtures
 
   @doc """
   Generate a demographic.
@@ -10,8 +11,8 @@ defmodule Pento.SurveyFixtures do
   def demographic_fixture(scope, attrs \\ %{}) do
     attrs =
       Enum.into(attrs, %{
-        gender: "some gender",
-        year_of_birth: 42
+        gender: "male",
+        year_of_birth: 1990
       })
 
     {:ok, demographic} = Pento.Survey.create_demographic(scope, attrs)
@@ -22,9 +23,12 @@ defmodule Pento.SurveyFixtures do
   Generate a rating.
   """
   def rating_fixture(scope, attrs \\ %{}) do
+    product = CatalogFixtures.product_fixture(scope)
+
     attrs =
       Enum.into(attrs, %{
-        stars: 42
+        stars: 4,
+        product_id: product.id
       })
 
     {:ok, rating} = Pento.Survey.create_rating(scope, attrs)

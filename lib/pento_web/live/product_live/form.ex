@@ -117,6 +117,7 @@ defmodule PentoWeb.ProductLive.Form do
   @impl true
   def handle_event("save", %{"product" => product_params}, socket) do
     product_params = params_with_image(socket, product_params)
+
     save_product(socket, socket.assigns.live_action, product_params)
   end
 

@@ -17,7 +17,7 @@ defmodule Pento.Survey.Rating do
   def changeset(rating, attrs, user_scope) do
     rating
     |> cast(attrs, [:stars, :product_id])
-    |> validate_required([:stars, :user_id, :product_id])
+    |> validate_required([:stars, :product_id])
     |> validate_inclusion(:stars, 1..5)
     |> put_change(:user_id, user_scope.user.id)
     |> unique_constraint([:user_id, :product_id])

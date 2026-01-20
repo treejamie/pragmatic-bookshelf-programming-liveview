@@ -42,7 +42,7 @@ defmodule Pento.CatalogTest do
         name: "some name",
         description: "some description",
         unit_price: 120.5,
-        sku: 42
+        sku: 4_300_000
       }
 
       scope = user_scope_fixture()
@@ -51,7 +51,7 @@ defmodule Pento.CatalogTest do
       assert product.name == "some name"
       assert product.description == "some description"
       assert product.unit_price == 120.5
-      assert product.sku == 42
+      assert product.sku == 4_300_000
       assert product.user_id == scope.user.id
     end
 
@@ -68,14 +68,14 @@ defmodule Pento.CatalogTest do
         name: "some updated name",
         description: "some updated description",
         unit_price: 456.7,
-        sku: 43
+        sku: 4_300_000
       }
 
       assert {:ok, %Product{} = product} = Catalog.update_product(scope, product, update_attrs)
       assert product.name == "some updated name"
       assert product.description == "some updated description"
       assert product.unit_price == 456.7
-      assert product.sku == 43
+      assert product.sku == 43_000_00
     end
 
     test "update_product/3 with invalid scope raises" do

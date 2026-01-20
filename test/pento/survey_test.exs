@@ -25,16 +25,19 @@ defmodule Pento.SurveyTest do
       demographic = demographic_fixture(scope)
       other_scope = user_scope_fixture()
       assert Survey.get_demographic!(scope, demographic.id) == demographic
-      assert_raise Ecto.NoResultsError, fn -> Survey.get_demographic!(other_scope, demographic.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Survey.get_demographic!(other_scope, demographic.id)
+      end
     end
 
     test "create_demographic/2 with valid data creates a demographic" do
-      valid_attrs = %{gender: "some gender", year_of_birth: 42}
+      valid_attrs = %{gender: "male", year_of_birth: 1982}
       scope = user_scope_fixture()
 
       assert {:ok, %Demographic{} = demographic} = Survey.create_demographic(scope, valid_attrs)
-      assert demographic.gender == "some gender"
-      assert demographic.year_of_birth == 42
+      assert demographic.gender == "male"
+      assert demographic.year_of_birth == 1982
       assert demographic.user_id == scope.user.id
     end
 
@@ -45,12 +48,14 @@ defmodule Pento.SurveyTest do
 
     test "update_demographic/3 with valid data updates the demographic" do
       scope = user_scope_fixture()
-      demographic = demographic_fixture(scope)
-      update_attrs = %{gender: "some updated gender", year_of_birth: 43}
+      demographic = demographic_fixture(scope, %{gender: "male", year_of_birth: 1960})
+      update_attrs = %{gender: "female", year_of_birth: 1999}
 
-      assert {:ok, %Demographic{} = demographic} = Survey.update_demographic(scope, demographic, update_attrs)
-      assert demographic.gender == "some updated gender"
-      assert demographic.year_of_birth == 43
+      assert {:ok, %Demographic{} = demographic} =
+               Survey.update_demographic(scope, demographic, update_attrs)
+
+      assert demographic.gender == "female"
+      assert demographic.year_of_birth == 1999
     end
 
     test "update_demographic/3 with invalid scope raises" do
@@ -66,7 +71,10 @@ defmodule Pento.SurveyTest do
     test "update_demographic/3 with invalid data returns error changeset" do
       scope = user_scope_fixture()
       demographic = demographic_fixture(scope)
-      assert {:error, %Ecto.Changeset{}} = Survey.update_demographic(scope, demographic, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Survey.update_demographic(scope, demographic, @invalid_attrs)
+
       assert demographic == Survey.get_demographic!(scope, demographic.id)
     end
 
@@ -117,11 +125,12 @@ defmodule Pento.SurveyTest do
     end
 
     test "create_rating/2 with valid data creates a rating" do
-      valid_attrs = %{stars: 42}
       scope = user_scope_fixture()
+      product = Pento.CatalogFixtures.product_fixture(scope)
+      valid_attrs = %{stars: 4, product_id: product.id}
 
       assert {:ok, %Rating{} = rating} = Survey.create_rating(scope, valid_attrs)
-      assert rating.stars == 42
+      assert rating.stars == 4
       assert rating.user_id == scope.user.id
     end
 
@@ -133,10 +142,10 @@ defmodule Pento.SurveyTest do
     test "update_rating/3 with valid data updates the rating" do
       scope = user_scope_fixture()
       rating = rating_fixture(scope)
-      update_attrs = %{stars: 43}
+      update_attrs = %{stars: 4}
 
       assert {:ok, %Rating{} = rating} = Survey.update_rating(scope, rating, update_attrs)
-      assert rating.stars == 43
+      assert rating.stars == 4
     end
 
     test "update_rating/3 with invalid scope raises" do

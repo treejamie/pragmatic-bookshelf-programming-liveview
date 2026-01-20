@@ -2,7 +2,6 @@ defmodule Pento.Accounts.RecipientNotifier do
   import Swoosh.Email
 
   alias Pento.Mailer
-  alias Pento.Accounts.User
 
   # Delivers the email using the application mailer.
   defp deliver(recipient, subject, body) do

@@ -4,10 +4,6 @@ defmodule PentoWeb.ProductLive.Form do
   alias Pento.Catalog
   alias Pento.Catalog.Product
 
-  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
-    {:noreply, cancel_upload(socket, :image, ref)}
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -105,6 +101,11 @@ defmodule PentoWeb.ProductLive.Form do
   end
 
   @impl true
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :image, ref)}
+  end
+
+  @impl true
   def handle_event("validate", %{"product" => product_params}, socket) do
     changeset =
       Catalog.change_product(socket.assigns.current_scope, socket.assigns.product, product_params)
@@ -113,6 +114,7 @@ defmodule PentoWeb.ProductLive.Form do
     {:noreply, assign_form(socket, changeset)}
   end
 
+  @impl true
   def handle_event("save", %{"product" => product_params}, socket) do
     product_params = params_with_image(socket, product_params)
     save_product(socket, socket.assigns.live_action, product_params)

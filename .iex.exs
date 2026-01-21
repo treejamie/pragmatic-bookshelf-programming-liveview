@@ -1,2 +1,2 @@
-alias Pento.Accounts.User
+alias Pento.{Survey, Accounts, Catalog}
 alias Pento.Repo

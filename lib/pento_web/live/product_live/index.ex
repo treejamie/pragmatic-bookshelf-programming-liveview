@@ -30,7 +30,7 @@ defmodule PentoWeb.ProductLive.Index do
           <div class="sr-only">
             <.link navigate={~p"/products/#{product}"}>Show</.link>
           </div>
-          <.link patch={~p"/products/#{product}/edit"}>Edit</.link>
+          <.link navigate={~p"/products/#{product}/edit"}>Edit</.link>
         </:action>
         <:action :let={{id, product}}>
           <.link

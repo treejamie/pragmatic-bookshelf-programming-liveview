@@ -10,6 +10,17 @@ defmodule Pento.Survey do
   alias Pento.Accounts.Scope
 
   @doc """
+  Gets a demographic for the given user scope.
+  Retu nill if no demographic exists for the user
+  """
+  def get_demographic_by_user(%Scope{} = scope) do
+    Repo.one(
+      from demographic in Demographic,
+        where: demographic.user_id == ^scope.user.id
+    )
+  end
+
+  @doc """
   Subscribes to scoped notifications about any demographic changes.
 
   The broadcasted messages match the pattern:

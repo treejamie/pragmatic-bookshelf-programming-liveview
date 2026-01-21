@@ -62,6 +62,11 @@ defmodule PentoWeb.ProductLiveTest do
       assert html =~ "some name"
     end
 
+    # test "updates product in listing", %{conn: conn, product: product} do
+    #   {:ok, index_live, _html} = live(conn, ~p"/products")
+
+    # end
+
     test "updates product in listing", %{conn: conn, product: product} do
       {:ok, index_live, _html} = live(conn, ~p"/products")
 
